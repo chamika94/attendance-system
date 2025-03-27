@@ -3,8 +3,14 @@ async function login() {
     const password = document.getElementById("password").value.trim();
     const errorMsg = document.getElementById("error-msg");
 
-
     errorMsg.textContent = "";
+
+    // Basic validation for empty fields
+    if (!userName || !password) {
+        errorMsg.textContent = "Username and password are required.";
+        errorMsg.style.color = "red";
+        return;
+    }
 
     try {
 
