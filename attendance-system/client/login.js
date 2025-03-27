@@ -7,6 +7,7 @@ async function login() {
     errorMsg.textContent = "";
 
     try {
+
         //use this to send credentials to the server
         const response = await fetch("http://localhost:8080/login", {
             method: "POST",
@@ -16,6 +17,9 @@ async function login() {
             body: JSON.stringify({ userName, password })
         });
 
+
+
+        //client-side service to communicate with login API
         if (!response.ok) {
             let errorMessage = "Invalid credentials!";
             try {
@@ -24,19 +28,21 @@ async function login() {
             } catch (error) {
                 console.error("Failed to parse response:", error);
             }
-
             errorMsg.textContent = errorMessage;
             errorMsg.style.color = "red";
             return;
         }
 
+        // Save token for Successfully login
         const result = await response.json();
         if (result.token) {
-            console.log("Login successful!")
+            localStorage.setItem("token", result.token);
         } else {
-            errorMsg.textContent = "Login Failed.";
+            errorMsg.textContent = "Login Failed";
             errorMsg.style.color = "red";
         }
+
+
     } catch (error) {
         console.error("Network or server error:", error);
         errorMsg.textContent = "Server error. Please try again later.";
