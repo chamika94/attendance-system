@@ -24,7 +24,6 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login(@RequestBody User user) {
         try {
-            System.out.println(user.getUserName());
             String token = userService.verify(user);
             TokenResponse tokenResponse = new TokenResponse(token);
             return new ResponseEntity<>(tokenResponse, HttpStatus.OK);
