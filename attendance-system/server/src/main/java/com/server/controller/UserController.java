@@ -32,5 +32,18 @@ public class UserController {
         }
     }
 
+    //This controller is used to Handles user registration by creating a new user and returning the registered user if successful
+    //and responds with a bad request status if registration fails
+
+    @PostMapping("/register")
+    public ResponseEntity<User> register(@RequestBody User user) {
+        User registeredUser = userService.register(user);
+        if (registeredUser != null) {
+            return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }
 
