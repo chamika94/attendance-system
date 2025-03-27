@@ -43,6 +43,7 @@ async function login() {
         const result = await response.json();
         if (result.token) {
             localStorage.setItem("token", result.token);
+            window.location.href = "home.html";
         } else {
             errorMsg.textContent = "Login Failed";
             errorMsg.style.color = "red";
