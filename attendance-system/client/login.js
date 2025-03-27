@@ -1,18 +1,46 @@
 async function login() {
     const userName = document.getElementById("username").value.trim();
     const password = document.getElementById("password").value.trim();
+    const errorMsg = document.getElementById("error-msg");
 
-    //use this to send credentials to the server
-    const response = await fetch("http://localhost:8080/login", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ userName, password })
-    });
 
-    const result = await response.json();
+    errorMsg.textContent = "";
 
-    console.log(result);
+    try {
+        //use this to send credentials to the server
+        const response = await fetch("http://localhost:8080/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ userName, password })
+        });
+
+        if (!response.ok) {
+            let errorMessage = "Invalid credentials!";
+            try {
+                const result = await response.json();
+                errorMessage = result.message || errorMessage; 
+            } catch (error) {
+                console.error("Failed to parse response:", error);
+            }
+
+            errorMsg.textContent = errorMessage;
+            errorMsg.style.color = "red";
+            return;
+        }
+
+        const result = await response.json();
+        if (result.token) {
+            console.log("Login successful!")
+        } else {
+            errorMsg.textContent = "Login Failed.";
+            errorMsg.style.color = "red";
+        }
+    } catch (error) {
+        console.error("Network or server error:", error);
+        errorMsg.textContent = "Server error. Please try again later.";
+        errorMsg.style.color = "red";
+    }
 
 }
